@@ -7,16 +7,13 @@ public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private CharacterController cc;
     [SerializeField] private float speed;
-
+    
     private Vector2 _input;
+    private Vector3 _direction;
 
     void Update()
     {
-            var h = Input.GetAxis("Horizontal");
-            var v = Input.GetAxis("Vertical");
-
-            var dir = new Vector3(h, 0, v) * speed;
-            cc.Move(dir * Time.deltaTime);  
+        cc.Move(_direction * speed * Time.deltaTime);         
     }
 
     // For SendMessages => But has dependancy to C# reflection.
@@ -31,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
+        _direction = new Vector3(_input.x, 0, _input.y);
         Debug.Log($"OnMove {_input}");
     }
 }
