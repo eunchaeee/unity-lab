@@ -19,9 +19,18 @@ public class PlayerMove : MonoBehaviour
             cc.Move(dir * Time.deltaTime);  
     }
 
-    public void Move(InputAction.CallbackContext context)
+    // For SendMessages => But has dependancy to C# reflection.
+    /*
+    public void OnMove(InputValue value)
+    {
+        _input = value.Get<Vector2>();
+        Debug.Log($"OnMove {_input}");
+    }
+    */
+
+    public void OnMove(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
-        Debug.Log(_input);
+        Debug.Log($"OnMove {_input}");
     }
 }
