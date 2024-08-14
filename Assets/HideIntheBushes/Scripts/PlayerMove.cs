@@ -7,12 +7,20 @@ public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private CharacterController cc;
     [SerializeField] private float speed;
+    [SerializeField] private float smoothTime = 0.05f;
+
     
     private Vector2 _input;
     private Vector3 _direction;
+    private float _currentVelocity;
 
     void Update()
     {
+        if (_input.magnitude == 0) return;
+
+        var targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
+        var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
+        transform.rotation = Quaternion.Euler(0, angle, 0);
         cc.Move(_direction * speed * Time.deltaTime);         
     }
 
