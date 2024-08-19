@@ -788,7 +788,8 @@ MonoBehaviour:
   cc: {fileID: 1369549524}
   speed: 10
   smoothTime: 0.05
-  gravityMultiplier: 3
+  gravityMultiplier: 1
+  _jumpPower: 4
 --- !u!114 &1369549526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,6 +832,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f1f1db2c-1f63-49ec-b34d-28b6205b0bbd
     m_ActionName: PlayerActions/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1369549525}
+        m_TargetAssemblyTypeName: PlayerMove, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6cd29095-ea0c-4a9c-b248-07f4c072f828
+    m_ActionName: PlayerActions/Jump[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerActions

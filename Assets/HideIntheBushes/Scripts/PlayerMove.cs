@@ -18,6 +18,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float gravityMultiplier = 3.0f;    // for fun game.
     private float _velocity;
 
+    [SerializeField] private float _jumpPower;
+
     private void Update()
     {
         ApplyGravity();
@@ -27,7 +29,7 @@ public class PlayerMove : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (cc.isGrounded && _velocity <0f)
+        if (IsGrounded() && _velocity <0f)
         {
             _velocity = 0f;
         }
@@ -67,4 +69,14 @@ public class PlayerMove : MonoBehaviour
         _direction = new Vector3(_input.x, 0, _input.y);
         Debug.Log($"OnMove {_input}");
     }
+
+    public void Jump(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        if (!IsGrounded()) return;
+
+        _velocity += _jumpPower;
+    }
+
+    private bool IsGrounded() => cc.isGrounded;
 }
