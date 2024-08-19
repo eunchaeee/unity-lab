@@ -14,14 +14,42 @@ public class PlayerMove : MonoBehaviour
     private Vector3 _direction;
     private float _currentVelocity;
 
-    void Update()
+    private float _gravity = -9.81f;
+    [SerializeField] private float gravityMultiplier = 3.0f;    // for fun game.
+    private float _velocity;
+
+    private void Update()
+    {
+        ApplyGravity();
+        ApplyRotation();
+        ApplyMovement();
+    }
+
+    private void ApplyGravity()
+    {
+        if (cc.isGrounded && _velocity <0f)
+        {
+            _velocity = 0f;
+        }
+        else
+        {
+            _velocity += _gravity * gravityMultiplier * Time.deltaTime;
+        }
+        _direction.y = _velocity;
+    }
+
+    private void ApplyRotation()
     {
         if (_input.magnitude == 0) return;
 
         var targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
         var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
         transform.rotation = Quaternion.Euler(0, angle, 0);
-        cc.Move(_direction * speed * Time.deltaTime);         
+    }
+
+    private void ApplyMovement()
+    {
+        cc.Move(_direction * speed * Time.deltaTime);
     }
 
     // For SendMessages => But has dependancy to C# reflection.
