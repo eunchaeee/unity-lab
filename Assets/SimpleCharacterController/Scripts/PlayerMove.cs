@@ -5,28 +5,25 @@ using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] private CharacterController cc;
+    [SerializeField] private CharacterController characterController;
+    [SerializeField] private Camera _mainCamera;
     [SerializeField] private float speed;
-    [SerializeField] private float smoothTime = 0.05f;
-
-    
+    [SerializeField] private float rotationSpeed = 500f;
+    [SerializeField] private float gravityMultiplier = 3.0f;    // for fun game.
+    [SerializeField] private float _jumpPower;
+    [SerializeField] private int maxNumberOfJumps = 2;
+   
     private Vector2 _input;
     private Vector3 _direction;
     private float _currentVelocity;
-
     private float _gravity = -9.81f;
-    [SerializeField] private float gravityMultiplier = 3.0f;    // for fun game.
     private float _velocity;
-
-    [SerializeField] private float _jumpPower;
-
     private int _numberOfJumps;
-    [SerializeField] private int maxNumberOfJumps = 2;
 
     private void Update()
     {
-        ApplyGravity();
         ApplyRotation();
+        ApplyGravity();
         ApplyMovement();
     }
 
@@ -47,14 +44,19 @@ public class PlayerMove : MonoBehaviour
     {
         if (_input.magnitude == 0) return;
 
-        var targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
-        var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
-        transform.rotation = Quaternion.Euler(0, angle, 0);
+        /*var targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
+        var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, rotationSpeed);
+        transform.rotation = Quaternion.Euler(0, angle, 0);*/
+
+        _direction = Quaternion.Euler(0, _mainCamera.transform.eulerAngles.y, 0) * new Vector3(_input.x, 0, _input.y);
+        var targetRotation = Quaternion.LookRotation(_direction, Vector3.up);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
     private void ApplyMovement()
     {
-        cc.Move(_direction * speed * Time.deltaTime);
+        characterController.Move(_direction * speed * Time.deltaTime);
     }
 
     // For SendMessages => But has dependancy to C# reflection.
@@ -89,5 +91,5 @@ public class PlayerMove : MonoBehaviour
         yield return new WaitUntil(IsGrounded);
         _numberOfJumps = 0;
     }
-    private bool IsGrounded() => cc.isGrounded;
+    private bool IsGrounded() => characterController.isGrounded;
 }
