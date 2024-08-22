@@ -20,6 +20,9 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private float _jumpPower;
 
+    private int _numberOfJumps;
+    [SerializeField] private int maxNumberOfJumps = 2;
+
     private void Update()
     {
         ApplyGravity();
@@ -73,10 +76,18 @@ public class PlayerMove : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-        if (!IsGrounded()) return;
-
-        _velocity += _jumpPower;
+        if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps) return;
+        if (_numberOfJumps == 0) StartCoroutine(WaitForLanding());
+        
+        _numberOfJumps++;
+        _velocity = _jumpPower/_numberOfJumps;
     }
 
+    private IEnumerator WaitForLanding()
+    {
+        yield return new WaitUntil(() => !IsGrounded());                                    
+        yield return new WaitUntil(IsGrounded);
+        _numberOfJumps = 0;
+    }
     private bool IsGrounded() => cc.isGrounded;
 }

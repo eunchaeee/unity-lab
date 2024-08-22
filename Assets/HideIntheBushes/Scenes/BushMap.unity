@@ -766,7 +766,7 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 1
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
@@ -789,7 +789,8 @@ MonoBehaviour:
   speed: 10
   smoothTime: 0.05
   gravityMultiplier: 1
-  _jumpPower: 4
+  _jumpPower: 3
+  maxNumberOfJumps: 2
 --- !u!114 &1369549526
 MonoBehaviour:
   m_ObjectHideFlags: 0
